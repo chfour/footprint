@@ -12,13 +12,55 @@
 "use strict";
 
 (() => {
+    const FONTLIST = [
+        "Fira Code", "Fira Sans", "Arial",
+        "Segoe UI", "Droid Sans", "Source Code Pro",
+        "Unifont", "Terminus", "Impact", "Noto Sans"
+    ];
+
+    /**
+     * test if font is available
+     * @param {Array} fonts the fonts to test
+     * @returns fonts found
+     */
+    function testFonts(fonts) {
+        const testSpan = document.createElement("span");
+        Object.assign(testSpan.style, {
+            visibility: "hidden",
+            display: "block",
+            position: "absolute",
+            top: "0", left: "0",
+            fontFamily: "initial",
+            fontSize: "42px"
+        });
+        testSpan.textContent = "mmmmmmmmmmlli"
+        document.body.appendChild(testSpan);
+
+        const defaultFontWidth = testSpan.getBoundingClientRect().width;
+
+        const foundFonts = [];
+        fonts.forEach(font => {
+            testSpan.style.fontFamily = font;
+            if (testSpan.getBoundingClientRect().width !== defaultFontWidth) {
+                foundFonts.push(font);
+            }
+        })
+        return foundFonts;
+    }
+    
+    /**
+     * run all tests
+     * @returns Object containing all collected information
+     */
     window.calculateFootprint = () => {
         return {
-            "navigator": {
+            navigator: {
                 userAgent: navigator.userAgent,
+                vendor: navigator.vendor
             },
             // the following is very hacky, but Number.isInteger(5.0) === true
-            "performance_now_isFloat": performance.now().toString().includes(".")
+            performance_now_isFloat: performance.now().toString().includes("."),
+            foundFonts: testFonts(FONTLIST)
         }
     }
 })();
