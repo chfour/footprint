@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>footprint demo</title>
+    <style>
+        body {
+            background-color: #181818;
+            color: white;
+            font-family: "Fira Sans", Arial, Helvetica, sans-serif;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+        #main {
+            width: 90%;
+            height: 50%;
+            margin: auto;
+        }
+        @media (min-width: 720px) {
+            #main {
+                width: 70%;
+            }
+        }
+        @media (min-width: 1200px) {
+            #main {
+                width: 60%;
+            }
+        }
+        .center {
+            display: block;
+            margin: 1em auto;
+            width: max-content;
+        }
+        #results {
+            font-family: "Fira Code", monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+    <script src="footprint.js"></script>
+    <script>
+        window.onload = () => {
+            console.log("window.onload fired!");
+            console.debug(window)
+            document.getElementById("runtest").addEventListener("click", () => {
+                document.getElementById("results").textContent = JSON.stringify(calculateFootprint(), null, 2);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="main">
+        <h1>footprint demo</h1>
+        <input type="button" value="run test" id="runtest">
+        <pre id="results"></pre>
+    </div>
+</body>
+</html>
