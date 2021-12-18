@@ -20,118 +20,133 @@
         return new Promise((resolve, reject) => setTimeout(resolve, duration));
     }
 
-    const FONTLIST = [
-        "Fira Code", "Fira Sans", "Arial", "Comic Sans",
-        "Segoe UI", "Droid Sans", "Source Code Pro",
-        "Unifont", "Terminus", "Impact", "Noto Sans",
-        "Courier New", "Noto Color Emoji", "Twemoji Mozilla",
-        "Georgia", "Marlett", "Lucida Console", "Segoe UI Emoji",
-        "Segoe UI Symbol", "SimSun", "Tahoma", "Wingdings",
-        "Consolas"
-    ];
-
-    /**
-     * test if font is available
-     * @param {Array} fonts the fonts to test
-     * @returns fonts found
-     */
-    function testFonts(fonts) {
-        const testSpan = document.createElement("span");
-        Object.assign(testSpan.style, {
-            visibility: "hidden",
-            display: "block",
-            position: "absolute",
-            top: "0", left: "0",
-            fontFamily: "sans-serif",
-            fontSize: "42px"
-        });
-        testSpan.textContent = "mmmmmmmmmmlli";
-        document.body.appendChild(testSpan);
-
-        const defaultFontWidth = testSpan.getBoundingClientRect().width;
-
-        const foundFonts = [];
-        fonts.forEach(font => {
-            testSpan.style.fontFamily = `'${font}', sans-serif`;
-            if (testSpan.getBoundingClientRect().width !== defaultFontWidth) {
-                foundFonts.push(font);
+    const TESTS = [
+        {
+            key: "navigator",
+            /**
+             * get data available from window.navigator
+             * @returns navigator data
+             */
+            test: async () => ({
+                userAgent: navigator.userAgent,
+                vendor: navigator.vendor
+            }),
+        },
+        {
+            key: "performance_now_isFloat",
+            /**
+             * test if performance.now() is a float
+             * @returns result of the test
+             */
+            test: async () => {
+                for (let i = 0; i < 5; i++) {
+                    // the following is very hacky, but Number.isInteger(5.0) === true
+                    if (performance.now().toString().includes(".")) return true;
+                    await wait(2 + Math.random());
+                }
+                return false;
             }
-        })
-        document.body.removeChild(testSpan);
-        return foundFonts;
-    }
-    
-    /**
-     * test if performance.now() is a float
-     * @returns result of the test
-     */
-    async function testPerformanceNow() {
-        for (let i = 0; i < 5; i++) {
-            // the following is very hacky, but Number.isInteger(5.0) === true
-            if (performance.now().toString().includes(".")) return true;
-            await wait(2 + Math.random());
+        },
+        {
+            key: "fonts",
+            /**
+             * test for available fonts
+             * @returns fonts found
+             */
+            test: async () => {
+                const testSpan = document.createElement("span");
+                Object.assign(testSpan.style, {
+                    visibility: "hidden",
+                    display: "block",
+                    position: "absolute",
+                    top: "0", left: "0",
+                    fontFamily: "sans-serif",
+                    fontSize: "42px"
+                });
+                testSpan.textContent = "mmmmmmmmmmlli";
+                document.body.appendChild(testSpan);
+
+                const defaultFontWidth = testSpan.getBoundingClientRect().width;
+
+                const foundFonts = [];
+                [
+                    "Fira Code", "Fira Sans", "Arial", "Comic Sans",
+                    "Segoe UI", "Droid Sans", "Source Code Pro",
+                    "Unifont", "Terminus", "Impact", "Noto Sans",
+                    "Courier New", "Noto Color Emoji", "Twemoji Mozilla",
+                    "Georgia", "Marlett", "Lucida Console", "Segoe UI Emoji",
+                    "Segoe UI Symbol", "SimSun", "Tahoma", "Wingdings",
+                    "Consolas"
+                ].forEach(font => {
+                    testSpan.style.fontFamily = `'${font}', sans-serif`;
+                    if (testSpan.getBoundingClientRect().width !== defaultFontWidth) {
+                        foundFonts.push(font);
+                    }
+                })
+                document.body.removeChild(testSpan);
+                return foundFonts;
+            }
+        },
+        {
+            key: "webgl",
+            /**
+             * run WebGL tests
+             * @returns test results
+             */
+            test: async () => {
+                const canvas = document.createElement("canvas");
+                canvas.width = 100; canvas.height = 100;
+                const gl = canvas.getContext("webgl");
+                if (gl === null) return {
+                    available: false,
+                    vendor: null,
+                    renderer: null
+                };
+
+                const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
+                return {
+                    available: true,
+                    vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
+                    renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
+                }
+            }
+        },
+        {
+            key: "webgl2",
+            /**
+             * run WebGL 2.0 tests
+             * @returns test results
+             */
+            test: async () => {
+                const canvas = document.createElement("canvas");
+                canvas.width = 100; canvas.height = 100;
+                const gl = canvas.getContext("webgl2");
+                if (gl === null) return {
+                    available: false,
+                    vendor: null,
+                    renderer: null
+                };
+
+                const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
+                return {
+                    available: true,
+                    vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
+                    renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
+                }
+            }
         }
-        return false;
-    }
-
-    /**
-     * run WebGL tests
-     * @returns test results
-     */
-    function testWebGL() {
-        const canvas = document.createElement("canvas");
-        canvas.width = 100; canvas.height = 100;
-        const gl = canvas.getContext("webgl");
-        if (gl === null) return {
-            available: false,
-            vendor: null,
-            renderer: null
-        };
-
-        const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
-        return {
-            available: true,
-            vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
-            renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
-        }
-    }
-
-    /**
-     * run WebGL 2.0 tests
-     * @returns test results
-     */
-    function testWebGL2() {
-        const canvas = document.createElement("canvas");
-        canvas.width = 100; canvas.height = 100;
-        const gl = canvas.getContext("webgl2");
-        if (gl === null) return {
-            available: false,
-            vendor: null,
-            renderer: null
-        };
-
-        const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
-        return {
-            available: true,
-            vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
-            renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
-        }
-    }
+    ];
 
     /**
      * run all tests
      * @returns Object containing all collected information
      */
     window.calculateFootprint = async () => {
-        return {
-            navigator: {
-                userAgent: navigator.userAgent,
-                vendor: navigator.vendor
-            },
-            performance_now_isFloat: await testPerformanceNow(),
-            foundFonts: testFonts(FONTLIST),
-            webgl: testWebGL(),
-            webgl2: testWebGL2()
-        }
+        const results = {};
+        await Promise.all(TESTS.map(async ({key, test}) => {
+            results[key] = await test();
+            console.debug(key, results[key]);
+        }));
+        return results;
     }
 })();
