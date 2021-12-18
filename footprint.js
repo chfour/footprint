@@ -108,8 +108,7 @@
 
                 const defaultFontWidth = testSpan.getBoundingClientRect().width;
 
-                const foundFonts = [];
-                [
+                const foundFonts = [
                     "Fira Code", "Fira Sans", "Arial", "Comic Sans",
                     "Segoe UI", "Droid Sans", "Source Code Pro",
                     "Unifont", "Terminus", "Impact", "Noto Sans",
@@ -120,12 +119,10 @@
                     "Consolas", "Droid Sans", "Roboto", "Droid Sans Mono",
                     "Roboto Condensed", "Apple Symbols", "Helvetica",
                     "Helvetica Neue", "Papyrus", "Verdana", "Webdings"
-                ].forEach(font => {
+                ].filter(font => {
                     testSpan.style.fontFamily = `'${font}', sans-serif`;
-                    if (testSpan.getBoundingClientRect().width !== defaultFontWidth) {
-                        foundFonts.push(font);
-                    }
-                })
+                    return testSpan.getBoundingClientRect().width !== defaultFontWidth
+                });
                 document.body.removeChild(testSpan);
                 return foundFonts;
             }
