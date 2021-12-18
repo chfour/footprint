@@ -75,6 +75,28 @@
     }
 
     /**
+     * run WebGL tests
+     * @returns test results
+     */
+    function testWebGL() {
+        const canvas = document.createElement("canvas");
+        canvas.width = 100; canvas.height = 100;
+        const gl = canvas.getContext("webgl");
+        if (gl === null) return {
+            available: false,
+            vendor: null,
+            renderer: null
+        };
+
+        const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
+        return {
+            available: true,
+            vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
+            renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
+        }
+    }
+
+    /**
      * run all tests
      * @returns Object containing all collected information
      */
@@ -85,7 +107,8 @@
                 vendor: navigator.vendor
             },
             performance_now_isFloat: await testPerformanceNow(),
-            foundFonts: testFonts(FONTLIST)
+            foundFonts: testFonts(FONTLIST),
+            webgl: testWebGL()
         }
     }
 })();
