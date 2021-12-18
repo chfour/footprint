@@ -21,9 +21,13 @@
     }
 
     const FONTLIST = [
-        "Fira Code", "Fira Sans", "Arial",
+        "Fira Code", "Fira Sans", "Arial", "Comic Sans",
         "Segoe UI", "Droid Sans", "Source Code Pro",
-        "Unifont", "Terminus", "Impact", "Noto Sans"
+        "Unifont", "Terminus", "Impact", "Noto Sans",
+        "Courier New", "Noto Color Emoji", "Twemoji Mozilla",
+        "Georgia", "Marlett", "Lucida Console", "Segoe UI Emoji",
+        "Segoe UI Symbol", "SimSun", "Tahoma", "Wingdings",
+        "Consolas"
     ];
 
     /**
@@ -38,17 +42,17 @@
             display: "block",
             position: "absolute",
             top: "0", left: "0",
-            fontFamily: "initial",
+            fontFamily: "sans-serif",
             fontSize: "42px"
         });
-        testSpan.textContent = "mmmmmmmmmmlli"
+        testSpan.textContent = "mmmmmmmmmmlli";
         document.body.appendChild(testSpan);
 
         const defaultFontWidth = testSpan.getBoundingClientRect().width;
 
         const foundFonts = [];
         fonts.forEach(font => {
-            testSpan.style.fontFamily = font;
+            testSpan.style.fontFamily = `'${font}', sans-serif`;
             if (testSpan.getBoundingClientRect().width !== defaultFontWidth) {
                 foundFonts.push(font);
             }
