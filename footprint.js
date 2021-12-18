@@ -103,11 +103,20 @@
                     renderer: null
                 };
 
-                const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
                 const results = {
                     available: true,
-                    vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
-                    renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
+                    directParameters: {
+                        vendor: gl.getParameter(gl.VENDOR),
+                        renderer: gl.getParameter(gl.RENDERER)
+                    }
+                }
+                // apparently this is deprecated in firefox
+                const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
+                if (glDebug) {
+                    results["debugInfoParameters"] = {
+                        vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
+                        renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
+                    }
                 }
                 gl.getExtension('WEBGL_lose_context').loseContext();
                 return results;
@@ -129,11 +138,20 @@
                     renderer: null
                 };
 
-                const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
                 const results = {
                     available: true,
-                    vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
-                    renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
+                    directParameters: {
+                        vendor: gl.getParameter(gl.VENDOR),
+                        renderer: gl.getParameter(gl.RENDERER)
+                    }
+                }
+                // apparently this is deprecated in firefox
+                const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
+                if (glDebug) {
+                    results["debugInfoParameters"] = {
+                        vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
+                        renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
+                    }
                 }
                 gl.getExtension('WEBGL_lose_context').loseContext();
                 return results;
