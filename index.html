@@ -46,7 +46,11 @@
             console.log("window.onload fired!");
             console.debug(window)
             document.getElementById("runtest").addEventListener("click", () => {
-                document.getElementById("results").textContent = JSON.stringify(calculateFootprint(), null, 2);
+                const timeStart = performance.now();
+                const results = calculateFootprint();
+                const timeEnd = performance.now();
+                console.debug("calculateFootprint()", timeEnd - timeStart, "ms");
+                document.getElementById("results").textContent = `* ${(timeEnd - timeStart).toFixed(1)}ms\n` + JSON.stringify(results, null, 2);
             });
         }
     </script>
@@ -55,7 +59,7 @@
     <div id="main">
         <h1>footprint demo</h1>
         <input type="button" value="run test" id="runtest">
-        <pre id="results"></pre>
+        <div id="results"></div>
     </div>
 </body>
 </html>

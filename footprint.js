@@ -49,6 +49,17 @@
     }
     
     /**
+     * test if performance.now() is a float
+     * @returns result of the test
+     */
+    function testPerformanceNow() {
+        for (let i = 0; i < 10; i++) {
+            if (performance.now().toString().includes(".")) return true
+        }
+        return false
+    }
+
+    /**
      * run all tests
      * @returns Object containing all collected information
      */
@@ -59,7 +70,7 @@
                 vendor: navigator.vendor
             },
             // the following is very hacky, but Number.isInteger(5.0) === true
-            performance_now_isFloat: performance.now().toString().includes("."),
+            performance_now_isFloat: testPerformanceNow(),
             foundFonts: testFonts(FONTLIST)
         }
     }
