@@ -73,10 +73,13 @@
                     "Fira Code", "Fira Sans", "Arial", "Comic Sans",
                     "Segoe UI", "Droid Sans", "Source Code Pro",
                     "Unifont", "Terminus", "Impact", "Noto Sans",
+                    "Noto Serif", "Apple Color Emoji", "Apple Braille",
                     "Courier New", "Noto Color Emoji", "Twemoji Mozilla",
                     "Georgia", "Marlett", "Lucida Console", "Segoe UI Emoji",
                     "Segoe UI Symbol", "SimSun", "Tahoma", "Wingdings",
-                    "Consolas"
+                    "Consolas", "Droid Sans", "Roboto", "Droid Sans Mono",
+                    "Roboto Condensed", "Apple Symbols", "Helvetica",
+                    "Helvetica Neue", "Papyrus", "Verdana", "Webdings"
                 ].forEach(font => {
                     testSpan.style.fontFamily = `'${font}', sans-serif`;
                     if (testSpan.getBoundingClientRect().width !== defaultFontWidth) {
