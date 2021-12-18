@@ -12,6 +12,14 @@
 "use strict";
 
 (() => {
+    /**
+     * wait for the specified amount of time in ms
+     * @param {Number} duration the duration
+     */
+    function wait(duration) {
+        return new Promise((resolve, reject) => setTimeout(resolve, duration));
+    }
+
     const FONTLIST = [
         "Fira Code", "Fira Sans", "Arial",
         "Segoe UI", "Droid Sans", "Source Code Pro",
@@ -45,6 +53,7 @@
                 foundFonts.push(font);
             }
         })
+        document.body.removeChild(testSpan);
         return foundFonts;
     }
     
@@ -52,25 +61,26 @@
      * test if performance.now() is a float
      * @returns result of the test
      */
-    function testPerformanceNow() {
-        for (let i = 0; i < 10; i++) {
-            if (performance.now().toString().includes(".")) return true
+    async function testPerformanceNow() {
+        for (let i = 0; i < 5; i++) {
+            // the following is very hacky, but Number.isInteger(5.0) === true
+            if (performance.now().toString().includes(".")) return true;
+            await wait(2 + Math.random());
         }
-        return false
+        return false;
     }
 
     /**
      * run all tests
      * @returns Object containing all collected information
      */
-    window.calculateFootprint = () => {
+    window.calculateFootprint = async () => {
         return {
             navigator: {
                 userAgent: navigator.userAgent,
                 vendor: navigator.vendor
             },
-            // the following is very hacky, but Number.isInteger(5.0) === true
-            performance_now_isFloat: testPerformanceNow(),
+            performance_now_isFloat: await testPerformanceNow(),
             foundFonts: testFonts(FONTLIST)
         }
     }

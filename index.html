@@ -47,10 +47,11 @@
             console.debug(window)
             document.getElementById("runtest").addEventListener("click", () => {
                 const timeStart = performance.now();
-                const results = calculateFootprint();
-                const timeEnd = performance.now();
-                console.debug("calculateFootprint()", timeEnd - timeStart, "ms");
-                document.getElementById("results").textContent = `* ${(timeEnd - timeStart).toFixed(1)}ms\n` + JSON.stringify(results, null, 2);
+                calculateFootprint().then(results => {
+                    const timeEnd = performance.now();
+                    console.debug("calculateFootprint()", timeEnd - timeStart, "ms");
+                    document.getElementById("results").textContent = `* ${(timeEnd - timeStart).toFixed(1)}ms\n` + JSON.stringify(results, null, 2);
+                });
             });
         }
     </script>
