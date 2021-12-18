@@ -142,8 +142,10 @@
                 const gl = canvas.getContext("webgl");
                 if (gl === null) return {
                     available: false,
-                    vendor: null,
-                    renderer: null
+                    directParameters: {
+                        vendor: null,
+                        renderer: null
+                    }
                 };
 
                 const results = {
@@ -177,8 +179,10 @@
                 const gl = canvas.getContext("webgl2");
                 if (gl === null) return {
                     available: false,
-                    vendor: null,
-                    renderer: null
+                    directParameters: {
+                        vendor: null,
+                        renderer: null
+                    }
                 };
 
                 const results = {
