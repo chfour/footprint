@@ -29,8 +29,48 @@
              */
             test: async () => ({
                 userAgent: navigator.userAgent,
-                vendor: navigator.vendor
+                vendor: navigator.vendor,
+                languages: navigator.languages,
+                maxTouchPoints: navigator.maxTouchPoints,
+                webdriver: navigator.webdriver,
+                userAgentData: navigator.userAgentData || null
             }),
+        },
+        {
+            key: "serial",
+            /**
+             * get info about the serial api
+             * @returns test results
+             */
+            test: async () => {
+                if (!navigator.serial) return {available: false, ports: null}
+                return {
+                    available: true,
+                    ports: await navigator.serial.getPorts()
+                }
+            }
+        },
+        {
+            key: "usb",
+            /**
+             * get info about the webusb api
+             * @returns test results
+             */
+            test: async () => {
+                if (!navigator.usb) return {available: false, ports: null}
+                return {
+                    available: true,
+                    devices: await navigator.usb.getDevices()
+                }
+            }
+        },
+        {
+            key: "midi",
+            /**
+             * test if midi access is available
+             * @return result of the test
+             */
+            test: () => ({available: Boolean(navigator.requestMIDIAccess)})
         },
         {
             key: "performance_now_isFloat",
