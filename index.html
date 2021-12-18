@@ -13,7 +13,6 @@
             width: 100%;
             height: 100%;
             margin: 0;
-            overflow: hidden;
         }
         #main {
             width: 90%;
@@ -35,9 +34,17 @@
             margin: 1em auto;
             width: max-content;
         }
-        #results {
-            font-family: "Fira Code", monospace;
+        #results, #status {
+            font-family: "Fira Code", "Lucida Console", monospace;
             white-space: pre-wrap;
+        }
+        #results {
+            display: grid;
+            grid-template-columns: repeat(2, auto);
+            gap: 2em 1em;
+        }
+        .key {
+            color: #d0b6ff;
         }
     </style>
     <script src="footprint.js"></script>
@@ -50,7 +57,21 @@
                 calculateFootprint().then(results => {
                     const timeEnd = performance.now();
                     console.debug("calculateFootprint()", timeEnd - timeStart, "ms");
-                    document.getElementById("results").textContent = `* ${(timeEnd - timeStart).toFixed(1)}ms\n` + JSON.stringify(results, null, 2);
+                    document.getElementById("status").textContent = `* ${(timeEnd - timeStart).toFixed(1)}ms\n`;
+                    
+                    const resultsList = document.getElementById("results");
+                    while(resultsList.firstChild) resultsList.removeChild(resultsList.lastChild);
+                    
+                    Object.keys(results).sort().forEach(key => {
+                        const keyEl = document.createElement("span");
+                        const resultEl = document.createElement("span");
+                        keyEl.classList.add("key");
+                        resultEl.classList.add("result");
+                        keyEl.textContent = key;
+                        resultEl.textContent = JSON.stringify(results[key], null, 2);
+                        resultsList.appendChild(keyEl);
+                        resultsList.appendChild(resultEl);
+                    })
                 });
             });
         }
@@ -60,6 +81,7 @@
     <div id="main">
         <h1>footprint demo</h1>
         <input type="button" value="run test" id="runtest">
+        <p id="status">click 'run test' above to see results</p>
         <div id="results"></div>
     </div>
 </body>
