@@ -104,11 +104,13 @@
                 };
 
                 const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
-                return {
+                const results = {
                     available: true,
                     vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
                     renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
                 }
+                gl.getExtension('WEBGL_lose_context').loseContext();
+                return results;
             }
         },
         {
@@ -128,11 +130,13 @@
                 };
 
                 const glDebug = gl.getExtension("WEBGL_debug_renderer_info");
-                return {
+                const results = {
                     available: true,
                     vendor: gl.getParameter(glDebug.UNMASKED_VENDOR_WEBGL),
                     renderer: gl.getParameter(glDebug.UNMASKED_RENDERER_WEBGL)
                 }
+                gl.getExtension('WEBGL_lose_context').loseContext();
+                return results;
             }
         }
     ];
